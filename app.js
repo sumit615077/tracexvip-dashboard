@@ -1,7 +1,6 @@
 const tg = window.Telegram?.WebApp;
 
 const API_MINIAPP = "https://telebot.botifyhost.app/api/miniapp/me";
-const API_DASHBOARD = "https://telebot.botifyhost.app/api/dashboard";
 
 let tgUserId = null;
 
@@ -22,20 +21,7 @@ function pick(obj, keys, fallback = "") {
 
 function normalizeUser(raw) {
     if (!raw) return {};
-
-    let u = raw.user || raw.data || raw.profile || raw.me || raw;
-
-    if (Array.isArray(raw.users) && tgUserId) {
-        const match = raw.users.find(x =>
-            String(x.id) === String(tgUserId) ||
-            String(x.user_id) === String(tgUserId) ||
-            String(x.telegram_id) === String(tgUserId) ||
-            String(x.chat_id) === String(tgUserId)
-        );
-        if (match) u = match;
-    }
-
-    return u || {};
+    return raw.user || raw.data || raw.profile || raw.me || raw;
 }
 
 function formatPlan(user) {
@@ -53,7 +39,9 @@ function formatExpiry(user) {
         "subscription_days", "days"
     ], "");
 
-    if (days !== "" && !isNaN(Number(days))) return Number(days) + " days left";
+    if (days !== "" && !isNaN(Number(days))) {
+        return Number(days) + " days left";
+    }
 
     return pick(user, [
         "expiry_date", "expiry", "vip_expiry", "subscription_expiry",
@@ -84,6 +72,7 @@ function applyUserData(rawData) {
 async function fetchJson(url, options = {}) {
     const res = await fetch(url, options);
     const text = await res.text();
+
     try {
         return JSON.parse(text);
     } catch {
@@ -94,25 +83,29 @@ async function fetchJson(url, options = {}) {
 
 async function loadDashboard() {
     try {
-        let data = null;
-
-        if (tg && tg.initData) {
-            data = await fetchJson(API_MINIAPP, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ initData: tg.initData })
-            });
+        if (!tg || !tg.initData) {
+            console.log("Telegram initData missing. Open from Telegram Open button.");
+            return;
         }
+
+        const data = await fetchJson(API_MINIAPP, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                initData: tg.initData
+            })
+        });
+
+        console.log("MiniApp API Data:", data);
 
         if (!data || data.success === false || data.error) {
-            data = await fetchJson(
-                API_DASHBOARD + (tgUserId ? "?uid=" + encodeURIComponent(tgUserId) : "")
-            );
+            console.log("MiniApp API failed:", data);
+            return;
         }
 
-        console.log("Dashboard API Data:", data);
-
-        if (data) applyUserData(data);
+        applyUserData(data);
 
     } catch (e) {
         console.log("Dashboard API Error:", e);
