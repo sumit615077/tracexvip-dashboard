@@ -1,13 +1,12 @@
 <!doctype html>
+
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
   <title>TRACE X VIP</title>
   <link rel="stylesheet" href="style.css"/>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <style>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>  <style>
     body::before{
       content:"";
       position:fixed;
@@ -31,16 +30,9 @@
     .mini:nth-child(2){animation-delay:.34s}
     .mini:nth-child(3){animation-delay:.40s}
     .mini:nth-child(4){animation-delay:.46s}
-    .crown{
-      animation: crownPulse 2.8s ease-in-out infinite;
-    }
-    .avatar{
-      animation: avatarGlow 3s ease-in-out infinite;
-    }
-    .balance-card{
-      position:relative;
-      overflow:hidden;
-    }
+    .crown{animation:crownPulse 2.8s ease-in-out infinite}
+    .avatar{animation:avatarGlow 3s ease-in-out infinite}
+    .balance-card{position:relative;overflow:hidden}
     .balance-card::after{
       content:"";
       position:absolute;
@@ -50,22 +42,15 @@
       height:220%;
       background:linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent);
       transform:rotate(22deg);
-      animation: shine 4.2s ease-in-out infinite;
+      animation:shine 4.2s ease-in-out infinite;
     }
     .counter-glow{
       text-shadow:0 0 22px rgba(255,218,93,.38);
       animation:numberPop .9s ease both;
     }
-    button,.nav{
-      transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
-    }
-    button:active,.nav:active{
-      transform:scale(.96);
-      filter:brightness(1.15);
-    }
-    .active{
-      animation: statusPulse 2.2s ease-in-out infinite;
-    }
+    button,.nav{transition:transform .18s ease, filter .18s ease, box-shadow .18s ease}
+    button:active,.nav:active{transform:scale(.96);filter:brightness(1.15)}
+    .active{animation:statusPulse 2.2s ease-in-out infinite}
     @keyframes premiumSweep{
       0%,100%{opacity:.45;transform:translateX(-25%)}
       50%{opacity:1;transform:translateX(25%)}
@@ -94,14 +79,9 @@
       0%,100%{box-shadow:0 0 0 rgba(103,255,139,0)}
       50%{box-shadow:0 0 18px rgba(103,255,139,.28)}
     }
-  </style>
-
-</head>
-<body>
+  </style></head><body>
   <div class="bg-orb orb1"></div>
-  <div class="bg-orb orb2"></div>
-
-  <div class="phone">
+  <div class="bg-orb orb2"></div>  <div class="phone">
     <section class="top">
       <div>
         <p class="secure">PRIVATE • VERIFIED • SECURE</p>
@@ -109,103 +89,93 @@
         <p class="sub" id="welcome">Premium Mini App Dashboard</p>
       </div>
       <div class="crown">♛</div>
-    </section>
-
-    <section class="user-card">
-      <div class="avatar" id="avatar">TX</div>
-      <div>
-        <h2 id="username">@traceuser</h2>
-        <p id="userid">User ID: Loading...</p>
-      </div>
-      <span class="active">ACTIVE</span>
-    </section>
-
-    <section class="balance-card">
-      <p>Available Credits</p>
-      <div class="balance-row">
-        <h3 id="credits" class="counter-glow">150</h3>
-        <button>Recharge</button>
-      </div>
-      <div class="vip-line">
-        <span id="plan">💎 Premium Plan</span>
-        <b id="expiry">28 days left</b>
-      </div>
-    </section>
-
-    <section class="mini-grid">
-      <div class="mini"><span>🔍</span><b id="today_searches">12</b><small>Today</small></div>
-      <div class="mini"><span>📈</span><b id="total_searches">340</b><small>Total</small></div>
-      <div class="mini"><span>🎁</span><b>35</b><small>Referral</small></div>
-      <div class="mini"><span>🛡</span><b>Safe</b><small>Status</small></div>
-    </section>
-
-    <main>
-      <section id="home" class="page show">
-        <h4>Quick Access</h4>
-        <div class="quick">
-          <button>📱 Phone</button>
-          <button>🚗 Vehicle</button>
-          <button>📧 Email</button>
-          <button>📸 Instagram</button>
-        </div>
-
-        <h4>Recent Activity</h4>
-        <div class="card-list" id="recent_activity">
-          <div class="item"><div><b>Phone Lookup</b><p>+91xxxxxxxxxx</p></div><span>-5</span></div>
-          <div class="item"><div><b>Recharge Added</b><p>Premium 30 Days</p></div><span class="green">+150</span></div>
-          <div class="item"><div><b>Vehicle Lookup</b><p>HR26AB1234</p></div><span>-3</span></div>
-        </div>
-      </section>
-
-      <section id="history" class="page">
-        <h4>Recharge History</h4>
-        <div class="history" id="recharge_history">
-          <div class="ticket"><b>#TX983721</b><p>₹199 • Premium 30 Days</p><small>✅ Success • 02 Jun 2026</small></div>
-          <div class="ticket"><b>#TX983610</b><p>₹99 • Basic 15 Days</p><small>✅ Success • 28 May 2026</small></div>
-        </div>
-
-        <h4>Lookup History</h4>
-        <div class="history" id="lookup_history">
-          <div class="ticket"><b>📱 Phone Info</b><p>+91xxxxxxxxxx</p><small>-5 Credits • 10:45 PM</small></div>
-          <div class="ticket"><b>🚗 Vehicle Info</b><p>HR26AB1234</p><small>-3 Credits • 10:30 PM</small></div>
-        </div>
-      </section>
-
-      <section id="recharge" class="page">
-        <h4>VIP Plans</h4>
-        <div class="plan best">
-          <div><b>Premium</b><p>150 Credits + VIP Badge</p></div>
-          <button>₹199</button>
-        </div>
-        <div class="plan">
-          <div><b>Master VIP</b><p>500 Credits + Priority Result</p></div>
-          <button>₹499</button>
-        </div>
-        <div class="plan">
-          <div><b>Ultra VIP</b><p>1000 Credits + Premium Support</p></div>
-          <button>₹899</button>
-        </div>
-      </section>
-
-      <section id="account" class="page">
-        <h4>Account Details</h4>
-        <div class="details">
-          <div><span>Plan</span><b id="account_plan">Premium</b></div>
-          <div><span>Device Protection</span><b>ON</b></div>
-          <div><span>Account Status</span><b>Safe</b></div>
-          <div><span>Support</span><b>@TraceXSupport</b></div>
-        </div>
-      </section>
-    </main>
+    </section><section class="user-card">
+  <div class="avatar" id="avatar">TX</div>
+  <div>
+    <h2 id="username">@traceuser</h2>
+    <p id="userid">User ID: Loading...</p>
   </div>
+  <span class="active">ACTIVE</span>
+</section>
 
-  <nav>
+<section class="balance-card">
+  <p>Available Credits</p>
+  <div class="balance-row">
+    <h3 id="credits" class="counter-glow">Loading...</h3>
+    <button>Recharge</button>
+  </div>
+  <div class="vip-line">
+    <span id="plan">Loading...</span>
+    <b id="expiry">Loading...</b>
+  </div>
+</section>
+
+<section class="mini-grid">
+  <div class="mini"><span>🔍</span><b id="today_searches">0</b><small>Today</small></div>
+  <div class="mini"><span>📈</span><b id="total_searches">0</b><small>Total</small></div>
+  <div class="mini"><span>🎁</span><b id="referral_count">0</b><small>Referral</small></div>
+  <div class="mini"><span>🛡</span><b id="account_status">Safe</b><small>Status</small></div>
+</section>
+
+<main>
+  <section id="home" class="page show">
+    <h4>Quick Access</h4>
+    <div class="quick">
+      <button>📱 Phone</button>
+      <button>🚗 Vehicle</button>
+      <button>📧 Email</button>
+      <button>📸 Instagram</button>
+    </div>
+
+    <h4>Recent Activity</h4>
+    <div class="card-list" id="recent_activity">
+      <div class="item"><div><b>Loading...</b><p>Real activity loading</p></div><span>...</span></div>
+    </div>
+  </section>
+
+  <section id="history" class="page">
+    <h4>Recharge History</h4>
+    <div class="history" id="recharge_history">
+      <div class="ticket"><b>Loading...</b><p>Recharge history loading</p><small>Please wait</small></div>
+    </div>
+
+    <h4>Lookup History</h4>
+    <div class="history" id="lookup_history">
+      <div class="ticket"><b>Loading...</b><p>Lookup history loading</p><small>Please wait</small></div>
+    </div>
+  </section>
+
+  <section id="recharge" class="page">
+    <h4>VIP Plans</h4>
+    <div class="plan best">
+      <div><b>Premium</b><p>150 Credits + VIP Badge</p></div>
+      <button>₹199</button>
+    </div>
+    <div class="plan">
+      <div><b>Master VIP</b><p>500 Credits + Priority Result</p></div>
+      <button>₹499</button>
+    </div>
+    <div class="plan">
+      <div><b>Ultra VIP</b><p>1000 Credits + Premium Support</p></div>
+      <button>₹899</button>
+    </div>
+  </section>
+
+  <section id="account" class="page">
+    <h4>Account Details</h4>
+    <div class="details">
+      <div><span>Plan</span><b id="account_plan">Loading...</b></div>
+      <div><span>Device Protection</span><b id="device_status">ON</b></div>
+      <div><span>Account Status</span><b id="account_status_detail">Safe</b></div>
+      <div><span>Support</span><b>@TraceXSupport</b></div>
+    </div>
+  </section>
+</main>
+
+  </div>  <nav>
     <button class="nav active" data-page="home">🏠<span>Home</span></button>
     <button class="nav" data-page="history">🧾<span>History</span></button>
     <button class="nav" data-page="recharge">💳<span>Recharge</span></button>
     <button class="nav" data-page="account">👤<span>Account</span></button>
-  </nav>
-
-  <script src="app.js"></script>
-</body>
+  </nav>  <script src="app.js"></script></body>
 </html>
