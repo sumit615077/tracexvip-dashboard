@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>TRACE X VIP Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">PRIVATE • VERIFIED • SECURE</p>
+        <h1>TRACE X VIP</h1>
+        <p id="tgUser">Telegram Mini App Dashboard</p>
+      </div>
+      <div class="vip-badge">VIP</div>
+    </header>
+
+    <section class="profile-card glass">
+      <div class="avatar" id="avatar">TX</div>
+      <div class="profile-info">
+        <h2 id="username">@username</h2>
+        <p id="userid">User ID: Loading...</p>
+        <span class="status">✅ Account Safe</span>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="stat glass">
+        <span>💎 Plan</span>
+        <strong>Premium</strong>
+        <small>28 Days Left</small>
+      </div>
+      <div class="stat glass">
+        <span>💰 Credits</span>
+        <strong>150</strong>
+        <small>Available Balance</small>
+      </div>
+      <div class="stat glass">
+        <span>🔍 Today</span>
+        <strong>12</strong>
+        <small>Searches</small>
+      </div>
+      <div class="stat glass">
+        <span>📈 Total</span>
+        <strong>340</strong>
+        <small>Lookups</small>
+      </div>
+    </section>
+
+    <section class="actions">
+      <button onclick="showPage('home')">🏠 Home</button>
+      <button onclick="showPage('history')">🧾 History</button>
+      <button onclick="showPage('recharge')">💳 Recharge</button>
+      <button onclick="showPage('account')">👤 Account</button>
+    </section>
+
+    <main>
+      <section id="home" class="page active">
+        <h3>Dashboard</h3>
+        <div class="glass list-card">
+          <div class="row"><span>Last Recharge</span><b>₹199</b></div>
+          <div class="row"><span>Last Lookup</span><b>Phone Info</b></div>
+          <div class="row"><span>Support</span><b>@TraceXSupport</b></div>
+        </div>
+      </section>
+
+      <section id="history" class="page">
+        <h3>History</h3>
+        <div class="glass history-item">
+          <b>#TX983721</b><span>₹199 Recharge • Premium 30 Days</span><small>✅ Success • 02 Jun 2026</small>
+        </div>
+        <div class="glass history-item">
+          <b>📱 Phone Lookup</b><span>+91xxxxxxxxxx</span><small>-5 Credits • Today 10:45 PM</small>
+        </div>
+        <div class="glass history-item">
+          <b>🚗 Vehicle Lookup</b><span>HR26AB1234</span><small>-3 Credits • Today 10:30 PM</small>
+        </div>
+      </section>
+
+      <section id="recharge" class="page">
+        <h3>Recharge Plans</h3>
+        <div class="glass plan">
+          <b>Premium 30 Days</b>
+          <span>150 Credits + VIP Badge</span>
+          <button>Recharge ₹199</button>
+        </div>
+        <div class="glass plan">
+          <b>Master VIP</b>
+          <span>500 Credits + Priority Lookup</span>
+          <button>Recharge ₹499</button>
+        </div>
+      </section>
+
+      <section id="account" class="page">
+        <h3>My Account</h3>
+        <div class="glass list-card">
+          <div class="row"><span>Plan</span><b>Premium</b></div>
+          <div class="row"><span>Device</span><b>Protected</b></div>
+          <div class="row"><span>Referral Earned</span><b>35 Credits</b></div>
+          <div class="row"><span>Status</span><b>Active</b></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Powered by TRACE X VIP
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
