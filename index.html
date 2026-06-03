@@ -6,6 +6,96 @@
   <title>TRACE X VIP</title>
   <link rel="stylesheet" href="style.css"/>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(120deg, transparent 0%, rgba(255,225,120,.08) 45%, transparent 58%),
+        radial-gradient(circle at 20% 0%, rgba(255,216,93,.10), transparent 35%);
+      animation: premiumSweep 5.5s ease-in-out infinite;
+      z-index:0;
+    }
+    .phone, nav{position:relative;z-index:1}
+    .top,.user-card,.balance-card,.mini,.item,.ticket,.plan,.details div{
+      animation: floatIn .65s ease both;
+      transform-origin:center;
+    }
+    .top{animation-delay:.03s}
+    .user-card{animation-delay:.12s}
+    .balance-card{animation-delay:.20s}
+    .mini:nth-child(1){animation-delay:.28s}
+    .mini:nth-child(2){animation-delay:.34s}
+    .mini:nth-child(3){animation-delay:.40s}
+    .mini:nth-child(4){animation-delay:.46s}
+    .crown{
+      animation: crownPulse 2.8s ease-in-out infinite;
+    }
+    .avatar{
+      animation: avatarGlow 3s ease-in-out infinite;
+    }
+    .balance-card{
+      position:relative;
+      overflow:hidden;
+    }
+    .balance-card::after{
+      content:"";
+      position:absolute;
+      top:-60%;
+      left:-80%;
+      width:55%;
+      height:220%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent);
+      transform:rotate(22deg);
+      animation: shine 4.2s ease-in-out infinite;
+    }
+    .counter-glow{
+      text-shadow:0 0 22px rgba(255,218,93,.38);
+      animation:numberPop .9s ease both;
+    }
+    button,.nav{
+      transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
+    }
+    button:active,.nav:active{
+      transform:scale(.96);
+      filter:brightness(1.15);
+    }
+    .active{
+      animation: statusPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes premiumSweep{
+      0%,100%{opacity:.45;transform:translateX(-25%)}
+      50%{opacity:1;transform:translateX(25%)}
+    }
+    @keyframes floatIn{
+      from{opacity:0;transform:translateY(18px) scale(.985)}
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+    @keyframes crownPulse{
+      0%,100%{transform:translateY(0) scale(1);box-shadow:0 0 28px rgba(246,200,77,.25)}
+      50%{transform:translateY(-4px) scale(1.04);box-shadow:0 0 45px rgba(246,200,77,.48)}
+    }
+    @keyframes avatarGlow{
+      0%,100%{box-shadow:0 0 0 rgba(246,200,77,0)}
+      50%{box-shadow:0 0 28px rgba(246,200,77,.42)}
+    }
+    @keyframes shine{
+      0%,45%{left:-90%}
+      75%,100%{left:135%}
+    }
+    @keyframes numberPop{
+      from{opacity:.2;transform:scale(.85)}
+      to{opacity:1;transform:scale(1)}
+    }
+    @keyframes statusPulse{
+      0%,100%{box-shadow:0 0 0 rgba(103,255,139,0)}
+      50%{box-shadow:0 0 18px rgba(103,255,139,.28)}
+    }
+  </style>
+
 </head>
 <body>
   <div class="bg-orb orb1"></div>
@@ -33,18 +123,18 @@
     <section class="balance-card">
       <p>Available Credits</p>
       <div class="balance-row">
-        <h3>150</h3>
+        <h3 id="credits" class="counter-glow">150</h3>
         <button>Recharge</button>
       </div>
       <div class="vip-line">
-        <span>💎 Premium Plan</span>
-        <b>28 days left</b>
+        <span id="plan">💎 Premium Plan</span>
+        <b id="expiry">28 days left</b>
       </div>
     </section>
 
     <section class="mini-grid">
-      <div class="mini"><span>🔍</span><b>12</b><small>Today</small></div>
-      <div class="mini"><span>📈</span><b>340</b><small>Total</small></div>
+      <div class="mini"><span>🔍</span><b id="today_searches">12</b><small>Today</small></div>
+      <div class="mini"><span>📈</span><b id="total_searches">340</b><small>Total</small></div>
       <div class="mini"><span>🎁</span><b>35</b><small>Referral</small></div>
       <div class="mini"><span>🛡</span><b>Safe</b><small>Status</small></div>
     </section>
@@ -60,7 +150,7 @@
         </div>
 
         <h4>Recent Activity</h4>
-        <div class="card-list">
+        <div class="card-list" id="recent_activity">
           <div class="item"><div><b>Phone Lookup</b><p>+91xxxxxxxxxx</p></div><span>-5</span></div>
           <div class="item"><div><b>Recharge Added</b><p>Premium 30 Days</p></div><span class="green">+150</span></div>
           <div class="item"><div><b>Vehicle Lookup</b><p>HR26AB1234</p></div><span>-3</span></div>
@@ -69,13 +159,13 @@
 
       <section id="history" class="page">
         <h4>Recharge History</h4>
-        <div class="history">
+        <div class="history" id="recharge_history">
           <div class="ticket"><b>#TX983721</b><p>₹199 • Premium 30 Days</p><small>✅ Success • 02 Jun 2026</small></div>
           <div class="ticket"><b>#TX983610</b><p>₹99 • Basic 15 Days</p><small>✅ Success • 28 May 2026</small></div>
         </div>
 
         <h4>Lookup History</h4>
-        <div class="history">
+        <div class="history" id="lookup_history">
           <div class="ticket"><b>📱 Phone Info</b><p>+91xxxxxxxxxx</p><small>-5 Credits • 10:45 PM</small></div>
           <div class="ticket"><b>🚗 Vehicle Info</b><p>HR26AB1234</p><small>-3 Credits • 10:30 PM</small></div>
         </div>
@@ -100,7 +190,7 @@
       <section id="account" class="page">
         <h4>Account Details</h4>
         <div class="details">
-          <div><span>Plan</span><b>Premium</b></div>
+          <div><span>Plan</span><b id="account_plan">Premium</b></div>
           <div><span>Device Protection</span><b>ON</b></div>
           <div><span>Account Status</span><b>Safe</b></div>
           <div><span>Support</span><b>@TraceXSupport</b></div>
