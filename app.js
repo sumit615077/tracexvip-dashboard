@@ -1,5 +1,124 @@
 const tg = window.Telegram?.WebApp;
 
+const API_MINIAPP = "https://telebot.botifyhost.app/api/miniapp/me";
+const API_DASHBOARD = "https://telebot.botifyhost.app/api/dashboard";
+
+let tgUserId = null;
+
+function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el && value !== undefined && value !== null && value !== "") {
+        el.innerText = String(value);
+    }
+}
+
+function pick(obj, keys, fallback = "") {
+    if (!obj) return fallback;
+    for (const k of keys) {
+        if (obj[k] !== undefined && obj[k] !== null && obj[k] !== "") return obj[k];
+    }
+    return fallback;
+}
+
+function normalizeUser(raw) {
+    if (!raw) return {};
+
+    let u = raw.user || raw.data || raw.profile || raw.me || raw;
+
+    if (Array.isArray(raw.users) && tgUserId) {
+        const match = raw.users.find(x =>
+            String(x.id) === String(tgUserId) ||
+            String(x.user_id) === String(tgUserId) ||
+            String(x.telegram_id) === String(tgUserId) ||
+            String(x.chat_id) === String(tgUserId)
+        );
+        if (match) u = match;
+    }
+
+    return u || {};
+}
+
+function formatPlan(user) {
+    const plan = pick(user, [
+        "plan_name", "plan", "subscription", "vip_plan", "package",
+        "membership", "sub_name", "title"
+    ], "Free");
+
+    return String(plan).includes("💎") ? String(plan) : "💎 " + plan;
+}
+
+function formatExpiry(user) {
+    const days = pick(user, [
+        "days_remaining", "days_left", "vip_days", "remaining_days",
+        "subscription_days", "days"
+    ], "");
+
+    if (days !== "" && !isNaN(Number(days))) return Number(days) + " days left";
+
+    return pick(user, [
+        "expiry_date", "expiry", "vip_expiry", "subscription_expiry",
+        "expires_at", "valid_till"
+    ], "No Expiry");
+}
+
+function applyUserData(rawData) {
+    const user = normalizeUser(rawData);
+
+    setText("credits", pick(user, [
+        "credits", "credit", "balance", "wallet", "coins", "points"
+    ], 0));
+
+    setText("plan", formatPlan(user));
+    setText("account_plan", formatPlan(user).replace("💎 ", ""));
+    setText("expiry", formatExpiry(user));
+
+    setText("today_searches", pick(user, [
+        "today_searches", "today_requests", "today_lookup", "requests_today"
+    ], 0));
+
+    setText("total_searches", pick(user, [
+        "total_searches", "total_requests", "total_lookup", "requests_total"
+    ], 0));
+}
+
+async function fetchJson(url, options = {}) {
+    const res = await fetch(url, options);
+    const text = await res.text();
+    try {
+        return JSON.parse(text);
+    } catch {
+        console.log("Non JSON:", text);
+        return null;
+    }
+}
+
+async function loadDashboard() {
+    try {
+        let data = null;
+
+        if (tg && tg.initData) {
+            data = await fetchJson(API_MINIAPP, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ initData: tg.initData })
+            });
+        }
+
+        if (!data || data.success === false || data.error) {
+            data = await fetchJson(
+                API_DASHBOARD + (tgUserId ? "?uid=" + encodeURIComponent(tgUserId) : "")
+            );
+        }
+
+        console.log("Dashboard API Data:", data);
+
+        if (data) applyUserData(data);
+
+    } catch (e) {
+        console.log("Dashboard API Error:", e);
+    }
+}
+
 if (tg) {
     tg.ready();
     tg.expand();
@@ -9,49 +128,19 @@ if (tg) {
     const user = tg.initDataUnsafe?.user;
 
     if (user) {
+        tgUserId = user.id;
+
         const name = user.username
             ? "@" + user.username
-            : (user.first_name || "Telegram User");
+            : [user.first_name, user.last_name].filter(Boolean).join(" ") || "Telegram User";
 
         setText("username", name);
         setText("userid", "User ID: " + user.id);
         setText("welcome", "Welcome " + (user.first_name || "User"));
         setText("avatar", (user.first_name || "TX").slice(0, 2).toUpperCase());
-
-        loadDashboard();
     }
-}
 
-function setText(id, value) {
-    const el = document.getElementById(id);
-    if (el) el.innerText = value;
-}
-
-async function loadDashboard() {
-    try {
-        const res = await fetch("https://telebot.botifyhost.app/api/miniapp/me", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                initData: tg.initData
-            })
-        });
-
-        const data = await res.json();
-        console.log("MiniApp Data:", data);
-
-        const user = data.user || data;
-
-        setText("credits", user.credits ?? user.balance ?? 0);
-        setText("plan", user.plan_name || user.plan || "Free");
-        setText("expiry", user.expiry_date || user.expiry || user.days_remaining || "No Expiry");
-        setText("account_plan", user.plan_name || user.plan || "Free");
-
-    } catch (e) {
-        console.log("API Error:", e);
-    }
+    loadDashboard();
 }
 
 document.querySelectorAll(".nav").forEach(btn => {
